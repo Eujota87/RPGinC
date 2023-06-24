@@ -5,21 +5,17 @@
 #include <string.h>
 
 struct character_t {
-	char name[30];
-	float exp;
-	float lvl;
+	char name[15];
 	float life;
 	float attack;
 	float defence;
 	float score;
-	int victory;
-	int defeat;
 	bool is_dead;
 };
 
 int main() {
 	// ----- Declaring and defining variables -----
-	char null[30];
+	char null[15];
 	int game_difficulty = 1;
 	int turn = 0;
 	int stamina = 5;
@@ -29,8 +25,6 @@ int main() {
 
 	struct character_t player[5];
 	struct character_t goblin;
-	player[session].victory = 0;
-	player[session].defeat = 0;
 	
 	// ----- Main loop -----
 	while (session <= 5) { 
@@ -38,25 +32,37 @@ int main() {
 		// ----- Main menu -----
 		action = 0;
 		fflush(stdin);
-		printf("-----Menu Principal-------\n\n"); 
-		printf("Escolha uma opção: \n\nNOVO JOGO[1]\nSCOREBOARD[2]\nSAIR[3]\n\n");
+		system("clear");
+		printf("\n-----Menu Principal-------\n\n"); 
+		printf("Escolha uma opção: \n\n \033[1;34mNOVO JOGO[1]\n SCOREBOARD[2]\n SAIR[3]\033[0m \n\n");
+		printf("--------------------------\n\n");
 		scanf("%d", &action);
 		// ----- Action 1, play new game -----
 		if (action == 1 && session < 5) { 
 			
-			printf("\nEscolha a dificuldade do jogo:\n\nFÁCIL[1]\nMÉDIO[2]\nDIFÍCIL[3]\n\n"); // --Session menu --
+			system("clear");
+			printf("\nEscolha a dificuldade do jogo:\n\n \033[1;34mFÁCIL[1]\n MÉDIO[2]\n DIFÍCIL[3]\033[0m \n\n"); // --Session menu --
 			scanf("%i", &game_difficulty);
+			while (game_difficulty != 1 && game_difficulty != 2 && game_difficulty != 3) {
+				sleep(1);
+				system("clear");
+				printf("\nPor favor, escolha uma opção válida!\n");
+				sleep(1);
+			    printf("\nEscolha a dificuldade do jogo:\n\n \033[1;34mFÁCIL[1]\n MÉDIO[2]\n DIFÍCIL[3]\033[0m \n\n");
+			    scanf("%i", &game_difficulty);
+			}
+			sleep(1);
+			system("clear");
 			printf("\nEscolha o nome do seu personagem: \n\n");
 			scanf("%s", &player[session].name);
 
 			// ----- Initialiazing status depending on chosen difficulty -----
 			switch (game_difficulty) { 
 			case (1):
-				player[session].exp = 0.0f;
-				player[session].lvl = 0.0f;
 				player[session].life = 100.0f;
 				player[session].attack = 5.0f;
 				player[session].defence = 10.0f;
+				player[session].score = 0.0f;
 
 				goblin.attack = 4.0f;
 				goblin.defence = 7.0f;
@@ -64,11 +70,10 @@ int main() {
 				goblin.is_dead = false;
 				break;
 			case (2):
-				player[session].exp = 0.0f;
-				player[session].lvl = 0.0f;
 				player[session].life = 100.0f;
 				player[session].attack = 5.0f;
 				player[session].defence = 10.0f;
+				player[session].score = 0.0f;				
 
 				goblin.attack = 5.0f;
 				goblin.defence = 8.0f;
@@ -76,11 +81,10 @@ int main() {
 				goblin.is_dead = false;
 				break;
 			case (3):
-				player[session].exp = 0.0f;
-				player[session].lvl = 0.0f;
 				player[session].life = 100.0f;
 				player[session].attack = 5.0f;
 				player[session].defence = 10.0f;
+				player[session].score = 0.0f;
 
 				goblin.attack = 6.0f;
 				goblin.defence = 9.0f;
@@ -89,23 +93,20 @@ int main() {
 				break;
 			}
 			
-			printf("\nDificuldade escolhida: %i\n", game_difficulty);
 			sleep(1);
 
 			// ----- Gameplay starts -----
 			if (player[session].is_dead == false) { 
-				turn = 1;
 				system("clear");
-				printf("\nBem vindo %s!\nVocê é um bravo gurreiro(a) que está explorando as abandonadas minas de Kara'zum. \n", player[session].name);
+				printf("\nBem vindo\033[1;33m %s \033[0m!\nVocê é um bravo guerreiro(a) que está explorando as abandonadas minas de Kara'zum. \n", player[session].name);
 				sleep(1);
 				printf("Você acabou de entrar na mina por uma apertada fenda rochosa, que você encontrou enquanto rodeava a gigantesca montanha cinzenta. \n");
 				sleep(1);
-				printf("\nEstá muito escuro dentro da mina... se por acaso tivesse uma maneira de iluminar o ambiente... \n\n \033[1;31mACENDER TOCHA[1]\033[0m\n\n");
+				printf("\nEstá muito escuro dentro da mina... se por acaso tivesse uma maneira de iluminar o ambiente... \n\n \033[1;34mACENDER TOCHA[1]\033[0m\n\n");
 				fflush(stdin);
 				scanf("%d", &action);
 			}
-
-			if (action != 1) {
+			if (action != 1 && player[session].is_dead == false) {
 				
 				system("clear");
 				printf("...\n");
@@ -113,12 +114,32 @@ int main() {
 				system("clear");
 				
 				while(action != 1) {
-				printf("Continua muito escuro aqui dentro... Se por acaso tivesse uma maneira de iluminar esse ambiente... \n\nACENDER TOCHA[1]");
+					printf("Continua muito escuro aqui dentro... Se por acaso tivesse uma maneira de iluminar esse ambiente... \n\n\033[1;34mACENDER TOCHA[1]\033[0m\n\n");
+					fflush(stdin);
+					scanf("%d", &action);
+					sleep(1);
+					system("clear");
+				}
+			}
+			if (action == 1 && player[session].is_dead == false) {
+				system("clear");
+				printf("A luz da sua tocha revela uma cena aterrorizante: Dois\033[1;32m goblins caçadores\033[0m estão posicionados a sua frente, prontos para atacar!\n\n \033[1;34mINICIAR BATALHA[1]\n TENTAR FUGIR[2]\033[0m\n\n");
 				fflush(stdin);
 				scanf("%d", &action);
-				sleep(1);
+				sleep(1);			
+			}
+			if (action == 2 && player[session].is_dead == false) {
 				system("clear");
-				}
+				sleep(1);
+				printf("Você rapidamente virou as costas e saiu correndo. Você conseguiu fugir, porém esse é o fim de seu aventura! \n");
+				player[session].is_dead = true;
+				player[session].score = 0;
+			}
+			if (action == 1 && player[session].is_dead == false) {
+				system("clear");
+				printf("\nataque\n");
+				sleep(1);
+				player[session].score = session + 20;
 			}
 
 			// ----- Bubble sort scoreboard -----
@@ -133,29 +154,35 @@ int main() {
 				}
 			}
 
-
-			// ----- Print game-over scoreboard -----
-			printf("---ScoreBoard---\n"); 
-			for (i = 0; i <= session; i++) {
-				printf("JOGADOR: %s ---- PONTUAÇÃO: %.2f\n", player[i].name, player[i].score);
-			}
-			printf("----------------\n\n");
-
 			session++;
+			action = 2;
 		}
 
 		// ----- Action 2, scoreboard -----
-		else if (action == 2 && session > 0) { 
-			printf("---ScoreBoard---\n"); //-- Print game-over scoreboard --
+		if (action == 2 && session > 0) { 
+			system("clear");
+			printf("\n-----------------ScoreBoard-------------------\n"); //-- Print game-over scoreboard --
 			for (i = 0; i < session; i++) {
-				printf("JOGADOR: %s ---- PONTUAÇÃO: %.2f\n", player[i].name, player[i].score);
+				printf("JOGADOR: %-15s      PONTUAÇÃO: %3.2f\n", player[i].name, player[i].score);
 			}
-			printf("----------------\n\n");
+			printf("----------------------------------------------\n\n");
+			printf("\033[1;34mPRESSIONE ENTER PARA CONTINUAR[]\033[0m \n");
+			fflush(stdin);
+			getchar();
+		}
+		else if (action == 2 && session == 0) {
+			system("clear");
+			printf("\nPor favor, jogue uma partida primeiro para poder visualizar o scoreboard\n");
+			sleep(2);
 		}
 
 		// ----- Action 3, exit game -----
-		else if (action == 3) {
+		if (action == 3) {
 			exit(0);
+		}
+		if (action != 1 && action != 2 && action != 3) {
+			printf("\n\n\033[1;31mPor favor, escolha uma opção válida\033[0m\n\n");
+			sleep(2);		
 		}
 	}//End main loop
 	
